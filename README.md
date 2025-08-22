@@ -24,14 +24,6 @@ A lightweight **Chrome/Edge extension** that lets you pick a random movie from y
 3. Watch the title shuffle animation, then reveal the final movie with poster.  
 4. Use **Close** to remove the overlay or **Reroll** to pick another random movie.  
 
-## File Structure
-
-random-movie-picker/
-├── content.js # Main script injected into Letterboxd pages
-├── styles.css # Styles for overlay and poster display
-├── manifest.json # Chrome/Edge extension manifest
-└── README.md # This file
-
 ## Notes
 
 - Works on **Letterboxd watchlists** and **user-created lists** only.  
