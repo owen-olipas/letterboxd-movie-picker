@@ -30,8 +30,7 @@ A lightweight **Chrome/Edge extension** that lets you pick a random movie from y
 - Posters are fetched directly from each movie page using JSON-LD metadata.  
 - Shuffle animation duration can be configured in `content.js`.  
 
-## Creator
+## License
 
-**KARL KENNETH OWEN D. OLIPAS**  
-BS Computer Science, Class of 2025  
-University of the Philippines Los Baños  
+MIT License – free to use and modify.  
+Copyright (c) 2025 KARL KENNETH OWEN D. OLIPAS
