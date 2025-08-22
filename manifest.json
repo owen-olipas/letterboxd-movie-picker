@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Letterboxd Movie Picker",
   "version": "1.0.0",
-  "description": "Spin your Letterboxd lists/watchlist to pick a movie!",
+  "description": "A lightweight Chrome/Edge extension that lets you pick a random movie from your Letterboxd list or watchlist, with a fun shuffle animation and poster preview.",
   "icons": {
     "16": "images/icon16.png",
     "32": "images/icon32.png",
