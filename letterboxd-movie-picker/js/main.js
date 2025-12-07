@@ -24,51 +24,73 @@ async function initializeExtension() {
   let isProcessing = false;
   let currentOverlay = null;
 
-  spinButton.addEventListener("click", async () => {
+  // Clear cache if URL changed (different list/watchlist)
+  if (moviesCache.isUrlChanged(window.location.href)) {
+    moviesCache.clear();
+  }
+
+  spinButton.addEventListener("click", async (e) => {
     if (isProcessing) return;
 
     if (currentOverlay) currentOverlay.remove();
 
-    isProcessing = true;
-    spinButton.disabled = true;
+    const currentUrl = window.location.href;
+    const forceRefresh = e.shiftKey; // Shift+Click to force refresh
 
-    const { overlay: loadingOverlay, title: loadingTitle } =
-      createLoadingOverlay(() => {
-        cleanup();
-      });
-    currentOverlay = loadingOverlay;
-
-    const cleanup = () => {
-      if (loadingOverlay.parentNode) loadingOverlay.remove();
-      isProcessing = false;
-      spinButton.disabled = false;
-      currentOverlay = null;
-    };
-
-    try {
-      const movies = await getAllMovies(window.location.href, (page) => {
-        loadingTitle.textContent = `Loading... (page ${page})`;
-      });
-
-      loadingOverlay.remove();
-      currentOverlay = null;
-
-      // Letterboxd doesn't allow empty lists, so if we get 0 movies,
-      // it means the page structure changed or selector failed
-      if (!movies.length) {
-        cleanup();
-        throw new Error();
-      }
-
-      isProcessing = false;
-      spinButton.disabled = false;
-      await animateMovies(movies, 3000, 100);
-    } catch (e) {
-      cleanup();
-      console.error("Error fetching movies", e);
-
-      createErrorOverlay();
+    // Check cache first (unless forcing refresh)
+    let movies = null;
+    if (!forceRefresh) {
+      movies = moviesCache.get(currentUrl);
     }
+
+    // If cache miss or force refresh, fetch movies
+    if (!movies) {
+      isProcessing = true;
+      spinButton.disabled = true;
+
+      const { overlay: loadingOverlay, title: loadingTitle } =
+        createLoadingOverlay(() => {
+          cleanup();
+        });
+      currentOverlay = loadingOverlay;
+
+      const cleanup = () => {
+        if (loadingOverlay.parentNode) loadingOverlay.remove();
+        isProcessing = false;
+        spinButton.disabled = false;
+        currentOverlay = null;
+      };
+
+      try {
+        movies = await getAllMovies(currentUrl, (page) => {
+          loadingTitle.textContent = `Loading... (page ${page})`;
+        });
+
+        loadingOverlay.remove();
+        currentOverlay = null;
+
+        // Letterboxd doesn't allow empty lists, so if we get 0 movies,
+        // it means the page structure changed or selector failed
+        if (!movies.length) {
+          cleanup();
+          throw new Error();
+        }
+
+        // Cache the movies
+        moviesCache.set(currentUrl, movies);
+
+        isProcessing = false;
+        spinButton.disabled = false;
+      } catch (error) {
+        cleanup();
+        console.error("Error fetching movies", error);
+        createErrorOverlay();
+        return;
+      }
+    }
+
+    // Use cached or freshly fetched movies
+    await animateMovies(movies, 3000, 100);
   });
 }
 

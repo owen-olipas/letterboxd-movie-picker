@@ -9,7 +9,7 @@ EXTENSION_DIR="letterboxd-movie-picker"
 OUTPUT_DIR="dist"
 ZIP_NAME="letterboxd-movie-picker.zip"
 
-echo "📦 Building Chrome extension package..."
+echo "Building Chrome extension package..."
 echo ""
 
 # Check if extension directory exists
@@ -41,7 +41,7 @@ cp -r "$EXTENSION_DIR/images" "$TEMP_DIR/"
 # Create zip file
 ZIP_PATH="$OUTPUT_DIR/$ZIP_NAME"
 echo ""
-echo "🗜️  Creating zip file: $ZIP_PATH..."
+echo "Creating zip file: $ZIP_PATH..."
 
 cd "$TEMP_DIR"
 zip -r "../$ZIP_NAME" . > /dev/null

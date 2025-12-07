@@ -39,24 +39,43 @@ const EXCLUDE_PATTERNS = [
   "build",
 ];
 
-function shouldExclude(filePath) {
+function matchesPattern(filePath, pattern) {
   const relativePath = path.relative(EXTENSION_DIR, filePath);
   const fileName = path.basename(filePath);
 
-  // Check exclude patterns
-  for (const pattern of EXCLUDE_PATTERNS) {
-    if (relativePath.includes(pattern) || fileName.includes(pattern)) {
+  // Check if pattern matches relative path or file name
+  if (relativePath.includes(pattern) || fileName.includes(pattern)) {
+    return true;
+  }
+
+  // Check wildcard patterns
+  if (pattern.includes("*")) {
+    const regex = new RegExp(pattern.replace(/\*/g, ".*"));
+    if (regex.test(relativePath) || regex.test(fileName)) {
       return true;
-    }
-    // Check wildcard patterns
-    if (pattern.includes("*")) {
-      const regex = new RegExp(pattern.replace(/\*/g, ".*"));
-      if (regex.test(relativePath) || regex.test(fileName)) {
-        return true;
-      }
     }
   }
 
+  return false;
+}
+
+function shouldInclude(filePath) {
+  // First check if file matches any include pattern
+  for (const pattern of INCLUDE_PATTERNS) {
+    if (matchesPattern(filePath, pattern)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function shouldExclude(filePath) {
+  // Check exclude patterns
+  for (const pattern of EXCLUDE_PATTERNS) {
+    if (matchesPattern(filePath, pattern)) {
+      return true;
+    }
+  }
   return false;
 }
 
@@ -68,11 +87,13 @@ function getAllFiles(dir, fileList = []) {
     const stat = fs.statSync(filePath);
 
     if (stat.isDirectory()) {
+      // Only recurse into directories that aren't excluded
       if (!shouldExclude(filePath)) {
         getAllFiles(filePath, fileList);
       }
     } else {
-      if (!shouldExclude(filePath)) {
+      // Include file if it matches include patterns AND is not excluded
+      if (shouldInclude(filePath) && !shouldExclude(filePath)) {
         fileList.push(filePath);
       }
     }
