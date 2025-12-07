@@ -1,0 +1,9 @@
+# Build output
+dist/
+
+# Extension development files
+letterboxd-movie-picker/node_modules/
+letterboxd-movie-picker/test-results/
+letterboxd-movie-picker/playwright-report/
+letterboxd-movie-picker/playwright/
+

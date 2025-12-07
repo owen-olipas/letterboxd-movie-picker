@@ -1,36 +1,75 @@
-# 🎬 Random Movie Picker for Letterboxd
+# Letterboxd Movie Picker
 
-A lightweight **Chrome/Edge extension** that lets you pick a random movie from your Letterboxd list or watchlist, with a fun shuffle animation and poster preview.  
+A lightweight Chrome extension that lets you pick a random movie from your Letterboxd list/s or watchlist.
 
-## Features
+**[Install from Chrome Web Store](https://chromewebstore.google.com/detail/blmhojgjpbplglhipfkdcdjpnbgmoajj?utm_source=item-share-cb)**
 
-- Pick a random movie from any **list** or **watchlist** page on Letterboxd.  
-- Buttons to **Close** or **Reroll** a new movie instantly.  
-- Live feedback while fetching movies.  
-- Styled to match Letterboxd’s clean aesthetic.  
+## Building the Extension
+
+To create a zip file for Chrome Web Store upload, use one of these methods:
+
+### Option 1: Using the Shell Script (macOS/Linux)
+
+```bash
+./build.sh
+```
+
+### Option 2: Using the Node.js Script (Cross-platform)
+
+```bash
+node build-extension.js
+```
+
+The build script will:
+
+- Include only essential files (manifest.json, js/, styles.css, images/)
+- Exclude development files (node_modules, tests, package.json, etc.)
+- Create a zip file in the `dist/` directory
+
+## Development
+
+### Running Tests
+
+```bash
+cd letterboxd-movie-picker
+npm install
+npm test
+```
+
+### Project Structure
+
+```
+letterboxd-movie-picker/
+├── manifest.json          # Extension manifest
+├── js/                    # JavaScript files
+│   ├── core/             # Core utilities and API
+│   ├── ui/               # UI components and animation
+│   └── main.js           # Entry point
+├── styles.css            # Extension styles
+└── images/               # Extension icons
+```
 
 ## Installation
 
-1. Clone or download this repository.  
-2. Open Chrome/Edge and go to `chrome://extensions` or `edge://extensions`.  
-3. Enable **Developer mode** (toggle at top-right).  
-4. Click **Load unpacked** and select the folder containing this extension.  
-5. Navigate to a Letterboxd list or watchlist page.  
+### Option 1: Install from Chrome Web Store (Recommended)
+
+**[Install from Chrome Web Store](https://chromewebstore.google.com/detail/blmhojgjpbplglhipfkdcdjpnbgmoajj?utm_source=item-share-cb)**
+
+### Option 2: Manual Installation (Development)
+
+1. Download or clone this repository
+2. Open Chrome and go to `chrome://extensions/`
+3. Enable "Developer mode"
+4. Click "Load unpacked"
+5. Select the `letterboxd-movie-picker` directory
 
 ## Usage
 
-1. Open a list/watchlist on Letterboxd.  
-2. Click the `"🎲 Pick a Movie"` button added to the page’s actions panel.  
-3. Watch the title shuffle animation, then reveal the final movie with poster.  
-4. Use **Close** to remove the overlay or **Reroll** to pick another random movie.  
-
-## Notes
-
-- Works on **Letterboxd watchlists** and **user-created lists** only.  
-- Posters are fetched directly from each movie page using JSON-LD metadata.  
-- Shuffle animation duration can be configured in `content.js`.  
+1. Navigate to any Letterboxd watchlist or list page
+2. Click the "🎲 Pick a Movie" button
+3. Wait for the extension to load all movies
+4. A random movie will be selected and displayed with its poster
 
 ## License
 
-MIT License – free to use and modify.  
-Copyright (c) 2025 KARL KENNETH OWEN D. OLIPAS
+See LICENSE file for details.
